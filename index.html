@@ -695,48 +695,55 @@ const pageSize = 20;
       });
     });
 
-    document.getElementById('sampleForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+const API_POST = "https://script.google.com/macros/s/AKfycbw38jNafwLpsw72uAav9t79txtkSCgDPYZfOP6S1ld6Zjho1LBhK5E5VTHNDrRueW_M/exec";
 
-      const saveBtn = document.getElementById('saveBtn');
-      saveBtn.disabled = true;
-      setStatus('Kaydediliyor...', true);
+document.getElementById('sampleForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-      const payload = {
-        orderNo: document.getElementById('orderNo').value.trim(),
-        urunGrubu: document.getElementById('urunGrubu').value,
-        kesimTarihSaat: document.getElementById('kesimTarihSaat').value,
-        dikimYeri: document.getElementById('dikimYeri').value.trim(),
-        dikimBaslama: document.getElementById('dikimBaslama').value,
-        dikimBitis: document.getElementById('dikimBitis').value,
-        numuneSayisi: Number(document.getElementById('numuneSayisi').value || 0),
-        dikimSayisi: document.getElementById('dikimSayisi').value,
-        varyantTipi: document.getElementById('varyantTipi').value,
-        varyantDetayi: document.getElementById('varyantDetayi').value.trim(),
-        durum: getDurum(),
-        redSebebi: getRedSebebi(),
-        aciklama: document.getElementById('aciklama').value.trim()
-      };
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true;
+  setStatus('Kaydediliyor...', true);
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          saveBtn.disabled = false;
+  const payload = {
+    orderNo: document.getElementById('orderNo').value.trim(),
+    urunGrubu: document.getElementById('urunGrubu').value,
+    kesimTarihSaat: document.getElementById('kesimTarihSaat').value,
+    dikimYeri: document.getElementById('dikimYeri').value.trim(),
+    dikimBaslama: document.getElementById('dikimBaslama').value,
+    dikimBitis: document.getElementById('dikimBitis').value,
+    numuneSayisi: Number(document.getElementById('numuneSayisi').value || 0),
+    dikimSayisi: document.getElementById('dikimSayisi').value,
+    varyantTipi: document.getElementById('varyantTipi').value,
+    varyantDetayi: document.getElementById('varyantDetayi').value.trim(),
+    durum: getDurum(),
+    redSebebi: getRedSebebi(),
+    aciklama: document.getElementById('aciklama').value.trim()
+  };
 
-          if (res && res.ok) {
-            document.getElementById('sampleForm').reset();
-            document.getElementById('varyantTipi').value = 'Standart';
-            setStatus((res.message || 'Kayıt başarıyla eklendi.') + ' | Sheet satır: ' + (res.rowCount || 0), true);
-            dashboardYukle();
-          } else {
-            setStatus((res && res.message) || 'Kayıt sırasında hata oluştu.', false);
-          }
-        })
-        .withFailureHandler(function(err) {
-          saveBtn.disabled = false;
-          setStatus('Hata: ' + (err && err.message ? err.message : err), false);
-        })
-        .kayitEkle(payload);
+  try {
+
+    const res = await fetch(API_POST, {
+      method: "POST",
+      body: JSON.stringify(payload)
     });
+
+    const result = await res.json();
+
+    if (result.ok) {
+      document.getElementById('sampleForm').reset();
+      document.getElementById('varyantTipi').value = 'Standart';
+      setStatus('Kayıt başarılı', true);
+      dashboardYukle();
+    } else {
+      setStatus(result.message, false);
+    }
+
+  } catch (err) {
+    setStatus("Hata: " + err.message, false);
+  }
+
+  saveBtn.disabled = false;
+});
 
     function sayiFormat(value, fraction = 2) {
       return Number(value || 0).toLocaleString('tr-TR', {
