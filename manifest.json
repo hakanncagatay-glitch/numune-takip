@@ -1,20 +1,24 @@
 {
   "name": "Numune Takip Sistemi",
   "short_name": "Numune",
-  "start_url": "./",
+  "id": "/numune-takip/",
+  "start_url": "/numune-takip/",
+  "scope": "/numune-takip/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0f766e",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "src": "https://hakanncagatay-glitch.github.io/numune-takip/icon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "src": "https://hakanncagatay-glitch.github.io/numune-takip/icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
