@@ -1036,49 +1036,54 @@ async function dashboardYukle() {
     setDebug('Hata: ' + err.message);
   }
 }
-    function kaydiGuncelle(id) {
-      const payload = {
-        id: id,
-        varyantTipi: document.getElementById('varyantTipi_' + id).value,
-        varyantDetayi: document.getElementById('varyantDetayi_' + id).value,
-        durum: document.getElementById('durum_' + id).value,
-        redSebebi: document.getElementById('redSebebi_' + id).value,
-        aciklama: document.getElementById('aciklama_' + id).value
-      };
+   async function kaydiGuncelle(id) {
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          if (res && res.ok) {
-            setDebug('Kayıt güncellendi: ' + id);
-            dashboardYukle();
-          } else {
-            setDebug((res && res.message) || 'Güncelleme hatası');
-          }
-        })
-        .withFailureHandler(function(err) {
-          setDebug('Güncelleme hatası: ' + (err && err.message ? err.message : err));
-        })
-        .kayitGuncelle(payload);
-    }
+  const payload = {
+    action: "update",
+    id: id,
+    varyantTipi: document.getElementById('varyantTipi_' + id).value,
+    varyantDetayi: document.getElementById('varyantDetayi_' + id).value,
+    durum: document.getElementById('durum_' + id).value,
+    redSebebi: document.getElementById('redSebebi_' + id).value,
+    aciklama: document.getElementById('aciklama_' + id).value
+  };
 
-    function kaydiSil(id) {
-      const onay = confirm('Bu kayıt silinsin mi?');
-      if (!onay) return;
+  const res = await fetch(API_POST, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          if (res && res.ok) {
-            setDebug('Kayıt silindi: ' + id);
-            dashboardYukle();
-          } else {
-            setDebug((res && res.message) || 'Silme hatası');
-          }
-        })
-        .withFailureHandler(function(err) {
-          setDebug('Silme hatası: ' + (err && err.message ? err.message : err));
-        })
-        .kayitSil(id);
-    }
+  const result = await res.json();
+
+  if (result.ok) {
+    dashboardYukle();
+  } else {
+    alert(result.message);
+  }
+}
+
+async function kaydiSil(id) {
+
+  if (!confirm("Silinsin mi?")) return;
+
+  const payload = {
+    action: "delete",
+    id: id
+  };
+
+  const res = await fetch(API_POST, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  const result = await res.json();
+
+  if (result.ok) {
+    dashboardYukle();
+  } else {
+    alert(result.message);
+  }
+}
 
     document.getElementById('btnSon7Gun').addEventListener('click', function() {
       const today = new Date();
