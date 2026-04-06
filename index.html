@@ -1,0 +1,1257 @@
+<!DOCTYPE html>title
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base target="_top">
+
+  <title>Numune Takip Sistemi</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" href="https://i.imgur.com/lhZQNgT.png">
+
+ 
+
+  <!-- CHART -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eef2f7;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      background: #0f766e;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(15,118,110,.2);
+    }
+
+    .tab-btn.passive {
+      background: #94a3b8;
+      box-shadow: none;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      margin-bottom: 16px;
+    }
+
+    h1, h2, h3 { margin: 0 0 12px 0; }
+    p { margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #0f766e;
+      box-shadow: 0 0 0 3px rgba(15,118,110,.12);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .radio-group, .check-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #fff;
+      min-height: 48px;
+      align-items: center;
+    }
+
+    .radio-group label, .check-group label {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .radio-group input, .check-group input {
+      width: auto;
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .actions button, .quick-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary { background: #0f766e; color: white; }
+    .secondary { background: #e2e8f0; color: #0f172a; }
+    .danger { background: #dc2626; color: white; }
+    .quick-btn { background: #dbeafe; color: #1e3a8a; }
+
+    .small-note {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    .status {
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    .ok { color: #166534; }
+    .err { color: #991b1b; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      min-height: 110px;
+    }
+
+    .stat-title {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 12px;
+      color: #0f172a;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .chart-wrap {
+      height: 320px;
+      position: relative;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1450px;
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    th {
+      background: #0f172a;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .debug {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #991b1b;
+      white-space: pre-wrap;
+    }
+
+    .islem-wrap {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mini-edit {
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+
+    .mini-delete {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    @media (max-width: 1100px) {
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .charts, .grid, .filters { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: 1fr; }
+      .container { padding: 10px; }
+      .tab-btn { width: 100%; }
+      .chart-wrap { height: 260px; }
+    }
+ 
+.topbar{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  background:#f8fafc;
+  border-radius:12px;
+}
+.tab-btn{
+  padding:10px 14px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  background:#e2e8f0;
+}
+
+.tab-btn.active{
+  background:#2563eb;
+  color:white;
+}
+@media (max-width:768px){
+  .logo-bar{
+    flex-direction:row;
+    justify-content:center;
+  }
+
+  .topbar{
+    flex-direction:column;
+  }
+}
+.mobile-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.mobile-card .title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.mobile-card .row {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.mobile-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.mobile-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* 📱 MOBİL */
+@media (max-width: 768px) {
+  table {
+    display: none;
+  }
+}
+
+/* 💻 PC */
+@media (min-width: 768px) {
+  #mobileList {
+    display: none;
+  }
+}
+  </style>
+</head>
+<body>
+
+    <div class="topbar">
+      <button type="button" id="btnForm" class="tab-btn">1. Operatör Giriş Ekranı</button>
+      <button type="button" id="btnDashboard" class="tab-btn passive">2. Dashboard</button>
+    </div>
+
+    <section id="pageForm" class="page active">
+      <div class="card">
+        <h1>Numune Takip Formu</h1>
+        <p>Operatör giriş ekranı</p>
+
+        <form id="sampleForm" class="grid">
+          <div>
+            <label>Order No</label>
+            <input type="text" id="orderNo" required />
+          </div>
+
+          <div>
+            <label>Ürün Grubu</label>
+            <select id="urunGrubu" required>
+              <option value="">Seçiniz</option>
+              <option>KONFEKSİYON</option>
+              <option>MAYO</option>
+              <option>ÇAMAŞIR</option>
+              <option>DİĞER</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Kesim Tarih / Saat</label>
+            <input type="datetime-local" id="kesimTarihSaat" required />
+          </div>
+
+          <div>
+            <label>Dikim Yeri / Atölye</label>
+            <input type="text" id="dikimYeri" required />
+          </div>
+
+          <div>
+            <label>Dikim Başlama Tarih / Saat</label>
+            <input type="datetime-local" id="dikimBaslama" required />
+          </div>
+
+          <div>
+            <label>Dikim Bitiş Tarih / Saat</label>
+            <input type="datetime-local" id="dikimBitis" required />
+          </div>
+
+          <div>
+            <label>Dikilen Numune Sayısı</label>
+            <input type="number" id="numuneSayisi" min="1" required />
+          </div>
+
+          <div>
+            <label>Dikim Sayısı</label>
+            <select id="dikimSayisi" required>
+              <option value="">Seçiniz</option>
+              <option value="İlk Dikim">İlk Dikim</option>
+              <option value="Tekrar Dikim">Tekrar Dikim</option>
+              <option value="2. Tekrar Dikim">2. Tekrar Dikim</option>
+              <option value="3. Tekrar Dikim">3. Tekrar Dikim</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Varyant Tipi</label>
+            <select id="varyantTipi" required>
+              <option value="Standart">Standart</option>
+              <option value="Üst">Üst</option>
+              <option value="Alt">Alt</option>
+              <option value="Renk">Renk</option>
+              <option value="Diğer">Diğer</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Varyant Detayı</label>
+            <input type="text" id="varyantDetayi" placeholder="Siyah, Beyaz, Kırmızı vb." />
+          </div>
+
+          <div>
+            <label>Durum</label>
+            <div class="radio-group">
+              <label><input type="radio" name="durum" value="Kabul" required /> Kabul</label>
+              <label><input type="radio" name="durum" value="Red" required /> Red</label>
+              <label><input type="radio" name="durum" value="Beklemede" required /> Beklemede</label>
+            </div>
+          </div>
+
+          <div>
+            <label>Red Sebebi</label>
+            <div class="check-group">
+              <label><input type="checkbox" name="redSebebi" value="Kalıp" /> Kalıp</label>
+              <label><input type="checkbox" name="redSebebi" value="Dikim" /> Dikim</label>
+              <label><input type="checkbox" name="redSebebi" value="Malzeme" /> Malzeme</label>
+            </div>
+          </div>
+
+          <div class="full">
+            <label>Not / Açıklama</label>
+            <textarea id="aciklama"></textarea>
+          </div>
+
+          <div class="full actions">
+            <button type="submit" class="primary" id="saveBtn">Kaydet</button>
+            <button type="reset" class="secondary">Temizle</button>
+          </div>
+        </form>
+
+        <div class="small-note">
+          Tekrar dikim seçilirse sadece aynı Order No + aynı varyant için önceki kayıt otomatik Red yapılır.
+        </div>
+        <div id="status" class="status"></div>
+      </div>
+    </section>
+
+    <section id="pageDashboard" class="page">
+      <div class="stats">
+        <div class="stat"><div class="stat-title">Toplam PPS</div><div class="stat-value" id="toplamKayit">0</div></div>
+        <div class="stat"><div class="stat-title">Kabul PPS</div><div class="stat-value" id="kabulSayisi">0</div></div>
+        <div class="stat"><div class="stat-title">Red PPS</div><div class="stat-value" id="redSayisi">0</div></div>
+        <div class="stat"><div class="stat-title">Beklemede PPS</div><div class="stat-value" id="beklemedeSayisi">0</div></div>
+        <div class="stat"><div class="stat-title">Ort. Dikim Süresi (saat)</div><div class="stat-value" id="ortalamaDikimSuresi">0,00</div></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-title">Toplam Ciro (TL)</div><div class="stat-value" id="toplamCiro">0</div></div>
+        <div class="stat"><div class="stat-title">Toplam Model Sayısı</div><div class="stat-value" id="toplamModelSayisi">0</div></div>
+        <div class="stat"><div class="stat-title">Ort. PPS Dönüş Süresi (gün)</div><div class="stat-value" id="ortalamaDonusSuresi">0,00</div></div>
+        <div class="stat"><div class="stat-title">Başlangıç Tarihi</div><div class="stat-value" id="baslangicLabel">TÜMÜ</div></div>
+        <div class="stat"><div class="stat-title">Bitiş Tarihi</div><div class="stat-value" id="bitisLabel">TÜMÜ</div></div>
+      </div>
+
+      <div class="card">
+        <h2>Tarih Aralığı</h2>
+        <div class="filters">
+          <div>
+            <label>Başlangıç Tarihi</label>
+            <input type="date" id="filterBaslangic" />
+          </div>
+          <div>
+            <label>Bitiş Tarihi</label>
+            <input type="date" id="filterBitis" />
+          </div>
+        </div>
+        <div>
+  <label>Order Ara</label>
+  <input type="text" id="filterOrder" placeholder="Order No yaz">
+</div>
+
+<div>
+  <label>Durum</label>
+  <select id="filterDurum">
+    <option value="">Tümü</option>
+    <option>Kabul</option>
+    <option>Red</option>
+    <option>Beklemede</option>
+  </select>
+</div>
+        <div class="filter-actions">
+          <button type="button" class="quick-btn" id="btnSon7Gun">Son 7 Gün</button>
+          <button type="button" class="quick-btn" id="btnBuAy">Bu Ay</button>
+          <button type="button" class="quick-btn" id="btnBuYil">Bu Yıl</button>
+          <button type="button" class="secondary" id="btnFiltreTemizle">Filtreleri Temizle</button>
+        </div>
+        <div id="debug" class="debug"></div>
+      </div>
+
+      <div class="charts">
+        <div class="chart-card">
+          <h3>Kabul / Red / Beklemede Oranı</h3>
+          <div class="chart-wrap"><canvas id="chartDurum"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Grup Bazlı Ciro</h3>
+          <div class="chart-wrap"><canvas id="chartCiro"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Atölye Bazlı Ortalama Dikim Süresi (saat)</h3>
+          <div class="chart-wrap"><canvas id="chartSure"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Red Sebep Analizi</h3>
+          <div class="chart-wrap"><canvas id="chartRedSebep"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card table-wrap">
+        <h2>Atölye Bazlı Dashboard</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Atölye</th>
+              <th>Ort. Dikim Süresi (saat)</th>
+              <th>Kabul</th>
+              <th>Red</th>
+              <th>Beklemede</th>
+              <th>Kabul Oranı</th>
+              <th>Red Oranı</th>
+              <th>Dikilen Model Sayısı</th>
+              <th>Ciro (TL)</th>
+            </tr>
+          </thead>
+          <tbody id="atelierBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card table-wrap">
+        <h2>Kayıt Listesi</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Order No</th>
+              <th>Ürün Grubu</th>
+              <th>Varyant Tipi</th>
+              <th>Varyant Detayı</th>
+              <th>Kesim Tarihi/Saat</th>
+              <th>Dikim Yeri</th>
+              <th>Dikim Başlama</th>
+              <th>Dikim Bitiş</th>
+              <th>Numune Sayısı</th>
+              <th>Dikim Sayısı</th>
+              <th>Dikim Süresi (saat)</th>
+              <th>PPS Dönüş (gün)</th>
+              <th>Durum</th>
+              <th>Red Sebebi</th>
+              <th>Açıklama</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="kayitBody"></tbody>
+          <div id="mobileList"></div>
+          </table>
+<div id="pagination" style="margin-top:10px;"></div>
+        </table>
+      </div>
+      <div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div style="background:white; padding:20px; width:400px; margin:100px auto; border-radius:10px;">
+    
+    <h3>Kayıt Güncelle</h3>
+
+    <label>Durum</label>
+    <select id="editDurum">
+      <option>Kabul</option>
+      <option>Red</option>
+      <option>Beklemede</option>
+    </select>
+
+    <label>Red Sebebi</label>
+    <select id="editRed">
+  <option value="">Seçiniz</option>
+  <option>Kalıp</option>
+  <option>Dikim</option>
+  <option>Malzeme</option>
+</select>
+
+    <label>Açıklama</label>
+    <input type="text" id="editAciklama">
+
+    <br><br>
+
+    <button onclick="kaydiKaydet()">Kaydet</button>
+    <button onclick="modalKapat()">İptal</button>
+
+  </div>
+
+    </section>
+
+  <script>
+    let currentPage = 1;
+const pageSize = 20;
+    let chartDurum = null;
+    let chartCiro = null;
+    let chartSure = null;
+    let chartRedSebep = null;
+    let tumVeriler = [];
+
+    function sayfaAc(target) {
+      const formAktif = target === 'form';
+      document.getElementById('pageForm').classList.toggle('active', formAktif);
+      document.getElementById('pageDashboard').classList.toggle('active', !formAktif);
+      document.getElementById('btnForm').classList.toggle('passive', !formAktif);
+      document.getElementById('btnDashboard').classList.toggle('passive', formAktif);
+
+      if (!formAktif) {
+        dashboardYukle();
+      }
+    }
+
+    document.getElementById('btnForm').addEventListener('click', () => sayfaAc('form'));
+    document.getElementById('btnDashboard').addEventListener('click', () => sayfaAc('dashboard'));
+
+    function getDurum() {
+      const secili = document.querySelector('input[name="durum"]:checked');
+      return secili ? secili.value : '';
+    }
+
+    function getRedSebebi() {
+      return [...document.querySelectorAll('input[name="redSebebi"]:checked')]
+        .map(x => x.value)
+        .join(', ');
+    }
+
+    function setStatus(text, ok) {
+      const el = document.getElementById('status');
+      el.textContent = text;
+      el.className = 'status ' + (ok ? 'ok' : 'err');
+    }
+
+    function setDebug(text) {
+      const el = document.getElementById('debug');
+      if (el) el.textContent = text;
+    }
+
+    document.querySelectorAll('input[name="redSebebi"]').forEach(chk => {
+      chk.addEventListener('change', function() {
+        const seciliRed = [...document.querySelectorAll('input[name="redSebebi"]:checked')].length > 0;
+        if (seciliRed) {
+          const redRadio = document.querySelector('input[name="durum"][value="Red"]');
+          if (redRadio) redRadio.checked = true;
+        }
+      });
+    });
+
+    document.getElementById('sampleForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      setStatus('Kaydediliyor...', true);
+
+      const payload = {
+        orderNo: document.getElementById('orderNo').value.trim(),
+        urunGrubu: document.getElementById('urunGrubu').value,
+        kesimTarihSaat: document.getElementById('kesimTarihSaat').value,
+        dikimYeri: document.getElementById('dikimYeri').value.trim(),
+        dikimBaslama: document.getElementById('dikimBaslama').value,
+        dikimBitis: document.getElementById('dikimBitis').value,
+        numuneSayisi: Number(document.getElementById('numuneSayisi').value || 0),
+        dikimSayisi: document.getElementById('dikimSayisi').value,
+        varyantTipi: document.getElementById('varyantTipi').value,
+        varyantDetayi: document.getElementById('varyantDetayi').value.trim(),
+        durum: getDurum(),
+        redSebebi: getRedSebebi(),
+        aciklama: document.getElementById('aciklama').value.trim()
+      };
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          saveBtn.disabled = false;
+
+          if (res && res.ok) {
+            document.getElementById('sampleForm').reset();
+            document.getElementById('varyantTipi').value = 'Standart';
+            setStatus((res.message || 'Kayıt başarıyla eklendi.') + ' | Sheet satır: ' + (res.rowCount || 0), true);
+            dashboardYukle();
+          } else {
+            setStatus((res && res.message) || 'Kayıt sırasında hata oluştu.', false);
+          }
+        })
+        .withFailureHandler(function(err) {
+          saveBtn.disabled = false;
+          setStatus('Hata: ' + (err && err.message ? err.message : err), false);
+        })
+        .kayitEkle(payload);
+    });
+
+    function sayiFormat(value, fraction = 2) {
+      return Number(value || 0).toLocaleString('tr-TR', {
+        minimumFractionDigits: fraction,
+        maximumFractionDigits: fraction
+      });
+    }
+
+    function saatTextFromDakika(dakika) {
+      return sayiFormat((Number(dakika) || 0) / 60, 2);
+    }
+
+function tarihUyuyorMu(kayitTarihi) {
+  if (!kayitTarihi) return true;
+
+  const kayit = new Date(kayitTarihi);
+
+  // ⚠️ KRİTİK: parse edilemezse ELEME!
+  if (isNaN(kayit)) return true;
+
+  const baslangic = document.getElementById('filterBaslangic').value;
+  const bitis = document.getElementById('filterBitis').value;
+
+  if (baslangic) {
+    const bas = new Date(baslangic);
+    if (kayit < bas) return false;
+  }
+
+  if (bitis) {
+    const bit = new Date(bitis);
+    bit.setHours(23,59,59);
+    if (kayit > bit) return false;
+  }
+
+  return true;
+}
+
+function filtreliVeriler() {
+  let data = tumVeriler;
+
+  const order = document.getElementById('filterOrder')?.value.toUpperCase() || '';
+  const durum = document.getElementById('filterDurum')?.value || '';
+
+  return data.filter(x => {
+
+    // Order filtre
+    if (order && !x.orderNo.toUpperCase().includes(order)) return false;
+
+    // Durum filtre
+    if (durum && x.durum !== durum) return false;
+
+    // Tarih filtre (sende zaten vardı)
+    if (!tarihUyuyorMu(x.dikimBaslama || x.kesimTarihSaat || x.kayitZamani)) return false;
+
+    return true;
+  });
+}
+    function renderStats(records) {
+      const toplamKayit = records.length;
+      const kabul = records.filter(x => x.durum === 'Kabul').length;
+      const red = records.filter(x => x.durum === 'Red').length;
+      const beklemede = records.filter(x => x.durum === 'Beklemede').length;
+      const toplamCiro = records.reduce((t, x) => t + (Number(x.ciro) || 0), 0);
+      const toplamModel = new Set(records.map(x => x.orderNo).filter(Boolean)).size;
+      const sureler = records.map(x => Number(x.dikimSuresiDakika) || 0).filter(x => x > 0);
+      const ortSureDakika = sureler.length ? (sureler.reduce((a, b) => a + b, 0) / sureler.length) : 0;
+      const donusSureleri = records.map(x => Number(x.donusSuresiGun) || 0).filter(x => x > 0);
+      const ortDonus = donusSureleri.length ? (donusSureleri.reduce((a, b) => a + b, 0) / donusSureleri.length) : 0;
+
+      document.getElementById('toplamKayit').textContent = toplamKayit.toLocaleString('tr-TR');
+      document.getElementById('kabulSayisi').textContent = kabul.toLocaleString('tr-TR');
+      document.getElementById('redSayisi').textContent = red.toLocaleString('tr-TR');
+      document.getElementById('beklemedeSayisi').textContent = beklemede.toLocaleString('tr-TR');
+      document.getElementById('ortalamaDikimSuresi').textContent = saatTextFromDakika(ortSureDakika);
+      document.getElementById('toplamCiro').textContent = Math.round(toplamCiro).toLocaleString('tr-TR');
+      document.getElementById('toplamModelSayisi').textContent = toplamModel.toLocaleString('tr-TR');
+      document.getElementById('ortalamaDonusSuresi').textContent = sayiFormat(ortDonus, 2);
+      document.getElementById('baslangicLabel').textContent = document.getElementById('filterBaslangic').value || 'TÜMÜ';
+      document.getElementById('bitisLabel').textContent = document.getElementById('filterBitis').value || 'TÜMÜ';
+    }
+
+    function renderAtelierTable(records) {
+      const grouped = buildAtelierData(records);
+      const tbody = document.getElementById('atelierBody');
+      tbody.innerHTML = '';
+
+      grouped.forEach(g => {
+        const toplamDegerlendirilen = g.kabul + g.red;
+        const kabulOrani = toplamDegerlendirilen ? ((g.kabul / toplamDegerlendirilen) * 100) : 0;
+        const redOrani = toplamDegerlendirilen ? ((g.red / toplamDegerlendirilen) * 100) : 0;
+        const ortSureDakika = g.sureAdet ? (g.sureToplam / g.sureAdet) : 0;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${g.atelye}</td>
+          <td>${saatTextFromDakika(ortSureDakika)}</td>
+          <td>${g.kabul}</td>
+          <td>${g.red}</td>
+          <td>${g.beklemede}</td>
+          <td>${sayiFormat(kabulOrani, 1)}%</td>
+          <td>${sayiFormat(redOrani, 1)}%</td>
+          <td>${g.modeller.size}</td>
+          <td>${Math.round(g.ciro).toLocaleString('tr-TR')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+ function renderKayitListesi(records) {
+  const tbody = document.getElementById('kayitBody');
+  tbody.innerHTML = '';
+
+  const start = (currentPage - 1) * pageSize;
+  const pageData = records.slice(start, start + pageSize);
+
+  pageData.forEach(r => {
+
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td>${r.orderNo || ''}</td>
+      <td>${r.urunGrubu || ''}</td>
+      <td>${r.varyantTipi || ''}</td>
+      <td>${r.varyantDetayi || ''}</td>
+      <td>${r.kesimTarihSaat || ''}</td>
+      <td>${r.dikimYeri || ''}</td>
+      <td>${r.dikimBaslama || ''}</td>
+      <td>${r.dikimBitis || ''}</td>
+      <td>${r.numuneSayisi || ''}</td>
+      <td>${r.dikimSayisi || ''}</td>
+      <td>${((r.dikimSuresiDakika || 0)/60).toFixed(2)}</td>
+      <td>${r.donusSuresiGun || ''}</td>
+      <td>${r.durum || ''}</td>
+      <td>${r.redSebebi || ''}</td>
+      <td>${r.aciklama || ''}</td>
+     <td>
+  <button onclick="editAc('${r.id}')">Düzenle</button>
+  <button onclick="kaydiSil('${r.id}')">Sil</button>
+</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+  renderPagination(records.length);
+}
+
+    function redSebebiDegisti(id) {
+      const redSebebiEl = document.getElementById('redSebebi_' + id);
+      const durumEl = document.getElementById('durum_' + id);
+
+      if (!redSebebiEl || !durumEl) return;
+
+      if (redSebebiEl.value) {
+        durumEl.value = 'Red';
+      }
+    }
+
+    function destroyCharts() {
+      if (chartDurum) { chartDurum.destroy(); chartDurum = null; }
+      if (chartCiro) { chartCiro.destroy(); chartCiro = null; }
+      if (chartSure) { chartSure.destroy(); chartSure = null; }
+      if (chartRedSebep) { chartRedSebep.destroy(); chartRedSebep = null; }
+    }
+
+    function renderCharts(records) {
+      destroyCharts();
+
+      if (typeof Chart === 'undefined') {
+        setDebug('Chart.js yüklenemedi.');
+        return;
+      }
+
+      const elDurum = document.getElementById('chartDurum');
+      const elCiro = document.getElementById('chartCiro');
+      const elSure = document.getElementById('chartSure');
+      const elRed = document.getElementById('chartRedSebep');
+
+      if (!elDurum || !elCiro || !elSure || !elRed) {
+        setDebug('Grafik alanları bulunamadı.');
+        return;
+      }
+
+      const kabul = records.filter(x => x.durum === 'Kabul').length;
+      const red = records.filter(x => x.durum === 'Red').length;
+      const beklemede = records.filter(x => x.durum === 'Beklemede').length;
+
+      chartDurum = new Chart(elDurum, {
+        type: 'pie',
+        data: {
+          labels: ['Kabul', 'Red', 'Beklemede'],
+          datasets: [{
+            data: [kabul, red, beklemede],
+            backgroundColor: ['#16a34a', '#dc2626', '#f59e0b']
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      const urunMap = {};
+      records.forEach(r => {
+        const key = r.urunGrubu || 'DİĞER';
+        urunMap[key] = (urunMap[key] || 0) + (Number(r.ciro) || 0);
+      });
+
+      chartCiro = new Chart(elCiro, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(urunMap),
+          datasets: [{
+            label: 'Ciro (TL)',
+            data: Object.values(urunMap),
+            backgroundColor: '#3b82f6'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      const grouped = buildAtelierData(records);
+      chartSure = new Chart(elSure, {
+        type: 'bar',
+        data: {
+          labels: grouped.map(x => x.atelye),
+          datasets: [{
+            label: 'Ortalama Dikim Süresi (Saat)',
+            data: grouped.map(x => x.sureAdet ? Number(((x.sureToplam / x.sureAdet) / 60).toFixed(2)) : 0),
+            backgroundColor: '#6366f1'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      const redMap = { 'Kalıp': 0, 'Dikim': 0, 'Malzeme': 0 };
+      records.forEach(r => {
+        const sebep = r.redSebebi || '';
+        Object.keys(redMap).forEach(key => {
+          if (sebep.includes(key)) redMap[key] += 1;
+        });
+      });
+
+      chartRedSebep = new Chart(elRed, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(redMap),
+          datasets: [{
+            label: 'Red Sebep Adedi',
+            data: Object.values(redMap),
+            backgroundColor: '#dc2626'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    function dashboardRender(records) {
+      if (!Array.isArray(records)) records = [];
+      renderStats(records);
+      renderAtelierTable(records);
+      renderCharts(records);
+      renderKayitListesi(records);
+      renderMobileList(records);
+    }
+
+   
+function dashboardYukle() {
+
+  setDebug('Dashboard verileri yükleniyor...');
+
+  google.script.run
+    .withSuccessHandler(function(data) {
+
+      console.log("DATA GELDİ:", data);
+
+      if (!Array.isArray(data)) {
+        setDebug('Veri formatı hatalı geldi.');
+        tumVeriler = [];
+        dashboardRender([]);
+        return;
+      }
+
+      tumVeriler = data;
+
+      const records = tumVeriler;
+      dashboardRender(records);
+
+      setDebug('Dashboard yüklendi. Kayıt sayısı: ' + data.length);
+
+    })
+    .withFailureHandler(function(err) {
+      console.log("HATA:", err);
+      setDebug('Hata: ' + err);
+    })
+    .veriGetir();
+}
+    function kaydiGuncelle(id) {
+      const payload = {
+        id: id,
+        varyantTipi: document.getElementById('varyantTipi_' + id).value,
+        varyantDetayi: document.getElementById('varyantDetayi_' + id).value,
+        durum: document.getElementById('durum_' + id).value,
+        redSebebi: document.getElementById('redSebebi_' + id).value,
+        aciklama: document.getElementById('aciklama_' + id).value
+      };
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.ok) {
+            setDebug('Kayıt güncellendi: ' + id);
+            dashboardYukle();
+          } else {
+            setDebug((res && res.message) || 'Güncelleme hatası');
+          }
+        })
+        .withFailureHandler(function(err) {
+          setDebug('Güncelleme hatası: ' + (err && err.message ? err.message : err));
+        })
+        .kayitGuncelle(payload);
+    }
+
+    function kaydiSil(id) {
+      const onay = confirm('Bu kayıt silinsin mi?');
+      if (!onay) return;
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.ok) {
+            setDebug('Kayıt silindi: ' + id);
+            dashboardYukle();
+          } else {
+            setDebug((res && res.message) || 'Silme hatası');
+          }
+        })
+        .withFailureHandler(function(err) {
+          setDebug('Silme hatası: ' + (err && err.message ? err.message : err));
+        })
+        .kayitSil(id);
+    }
+
+    document.getElementById('btnSon7Gun').addEventListener('click', function() {
+      const today = new Date();
+      const past = new Date();
+      past.setDate(today.getDate() - 6);
+      document.getElementById('filterBaslangic').value = past.toISOString().slice(0, 10);
+      document.getElementById('filterBitis').value = today.toISOString().slice(0, 10);
+      dashboardRender(filtreliVeriler());
+    });
+
+    document.getElementById('btnBuAy').addEventListener('click', function() {
+      const today = new Date();
+      const first = new Date(today.getFullYear(), today.getMonth(), 1);
+      const last = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      document.getElementById('filterBaslangic').value = first.toISOString().slice(0, 10);
+      document.getElementById('filterBitis').value = last.toISOString().slice(0, 10);
+      dashboardRender(filtreliVeriler());
+    });
+
+    document.getElementById('btnBuYil').addEventListener('click', function() {
+      const today = new Date();
+      const first = new Date(today.getFullYear(), 0, 1);
+      const last = new Date(today.getFullYear(), 11, 31);
+      document.getElementById('filterBaslangic').value = first.toISOString().slice(0, 10);
+      document.getElementById('filterBitis').value = last.toISOString().slice(0, 10);
+      dashboardRender(filtreliVeriler());
+    });
+
+    document.getElementById('btnFiltreTemizle').addEventListener('click', function() {
+      document.getElementById('filterBaslangic').value = '';
+      document.getElementById('filterBitis').value = '';
+      dashboardRender(filtreliVeriler());
+    });
+
+    document.getElementById('filterBaslangic').addEventListener('change', function() {
+      dashboardRender(filtreliVeriler());
+    });
+
+    document.getElementById('filterBitis').addEventListener('change', function() {
+      dashboardRender(filtreliVeriler());
+    });
+    function renderPagination(total) {
+  const totalPages = Math.ceil(total / pageSize);
+
+  document.getElementById('pagination').innerHTML = `
+    <button onclick="prevPage()">◀</button>
+    Sayfa ${currentPage} / ${totalPages}
+    <button onclick="nextPage(${totalPages})">▶</button>
+  `;
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    dashboardRender(filtreliVeriler());
+  }
+}
+
+function nextPage(total) {
+  if (currentPage < total) {
+    currentPage++;
+    dashboardRender(filtreliVeriler());
+  }
+}
+function buildAtelierData(records) {
+  const map = {};
+
+  records.forEach(r => {
+    const key = r.dikimYeri || 'Bilinmeyen';
+
+    if (!map[key]) {
+      map[key] = {
+        atelye: key,
+        kabul: 0,
+        red: 0,
+        beklemede: 0,
+        sureToplam: 0,
+        sureAdet: 0,
+        modeller: new Set(),
+        ciro: 0
+      };
+    }
+
+    const g = map[key];
+
+    if (r.durum === 'Kabul') g.kabul++;
+    if (r.durum === 'Red') g.red++;
+    if (r.durum === 'Beklemede') g.beklemede++;
+
+    if (Number(r.dikimSuresiDakika) > 0) {
+      g.sureToplam += Number(r.dikimSuresiDakika);
+      g.sureAdet++;
+    }
+
+    if (r.orderNo) g.modeller.add(r.orderNo);
+
+    g.ciro += Number(r.ciro || 0);
+  });
+
+  return Object.values(map);
+}
+let aktifID = null;
+
+function editAc(id) {
+  const kayit = tumVeriler.find(x => x.id == id);
+  if (!kayit) return;
+
+  aktifID = id;
+
+  document.getElementById('editDurum').value = kayit.durum;
+  document.getElementById('editRed').value = kayit.redSebebi;
+  document.getElementById('editAciklama').value = kayit.aciklama;
+
+  document.getElementById('editModal').style.display = 'block';
+}
+
+function modalKapat() {
+  document.getElementById('editModal').style.display = 'none';
+}
+
+function kaydiKaydet() {
+  const payload = {
+    id: aktifID,
+    durum: document.getElementById('editDurum').value,
+    redSebebi: document.getElementById('editRed').value,
+    aciklama: document.getElementById('editAciklama').value
+  };
+
+  google.script.run
+    .withSuccessHandler(() => {
+      modalKapat();
+      dashboardYukle();
+    })
+    .kayitGuncelle(payload);
+}
+document.getElementById('filterOrder').addEventListener('input', function() {
+  currentPage = 1;
+  renderKayitListesi(filtreliVeriler());
+});
+document.getElementById('filterDurum').addEventListener('change', function() {
+  currentPage = 1;
+  renderKayitListesi(filtreliVeriler());
+});
+function renderMobileList(records) {
+  const container = document.getElementById('mobileList');
+  container.innerHTML = '';
+
+  const start = (currentPage - 1) * pageSize;
+  const pageData = records.slice(start, start + pageSize);
+
+  pageData.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'mobile-card';
+
+    // 🔴🟡🟢 renk
+    let renk = '';
+    if (r.durum === 'Kabul') renk = '🟢';
+    else if (r.durum === 'Red') renk = '🔴';
+    else renk = '🟡';
+
+    div.innerHTML = `
+      <div class="title">${renk} ${r.orderNo}</div>
+
+      <div class="row"><b>Ürün:</b> ${r.urunGrubu}</div>
+      <div class="row"><b>Atölye:</b> ${r.dikimYeri}</div>
+      <div class="row"><b>Dikim:</b> ${r.dikimSayisi}</div>
+      <div class="row"><b>Durum:</b> ${r.durum}</div>
+      <div class="row"><b>Red:</b> ${r.redSebebi || '-'}</div>
+
+      <div class="mobile-actions">
+        <button onclick="editAc('${r.id}')">Düzenle</button>
+        <button onclick="kaydiSil('${r.id}')">Sil</button>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+  </script>
+</body>
+</html>
