@@ -1265,5 +1265,12 @@ function renderMobileList(records) {
   });
 }
   </script>
+  <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+    .then(() => console.log("SW OK"))
+    .catch(err => console.log("SW HATA", err));
+}
+</script>
 </body>
 </html>
