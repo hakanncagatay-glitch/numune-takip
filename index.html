@@ -1204,29 +1204,30 @@ function modalKapat() {
   document.getElementById('editModal').style.display = 'none';
 }
 
-function kaydiKaydet() {
+async function kaydiKaydet() {
+
   const payload = {
+    action: "update",
     id: aktifID,
     durum: document.getElementById('editDurum').value,
     redSebebi: document.getElementById('editRed').value,
     aciklama: document.getElementById('editAciklama').value
   };
 
-  google.script.run
-    .withSuccessHandler(() => {
-      modalKapat();
-      dashboardYukle();
-    })
-    .kayitGuncelle(payload);
+  const res = await fetch(API_POST, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  const result = await res.json();
+
+  if (result.ok) {
+    modalKapat();
+    dashboardYukle();
+  } else {
+    alert(result.message);
+  }
 }
-document.getElementById('filterOrder').addEventListener('input', function() {
-  currentPage = 1;
-  renderKayitListesi(filtreliVeriler());
-});
-document.getElementById('filterDurum').addEventListener('change', function() {
-  currentPage = 1;
-  renderKayitListesi(filtreliVeriler());
-});
 function renderMobileList(records) {
   const container = document.getElementById('mobileList');
   container.innerHTML = '';
