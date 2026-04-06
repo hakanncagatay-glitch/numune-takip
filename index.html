@@ -1001,35 +1001,33 @@ function filtreliVeriler() {
     }
 
    
-function dashboardYukle() {
+const API_URL = "https://script.google.com/macros/s/AKfycbw38jNafwLpsw72uAav9t79txtkSCgDPYZfOP6S1ld6Zjho1LBhK5E5VTHNDrRueW_M/exec?action=getData";
+
+async function dashboardYukle() {
 
   setDebug('Dashboard verileri yükleniyor...');
 
-  google.script.run
-    .withSuccessHandler(function(data) {
+  try {
 
-      console.log("DATA GELDİ:", data);
+    const res = await fetch(API_URL);
+    const data = await res.json();
 
-      if (!Array.isArray(data)) {
-        setDebug('Veri formatı hatalı geldi.');
-        tumVeriler = [];
-        dashboardRender([]);
-        return;
-      }
+    console.log("DATA GELDİ:", data);
 
-      tumVeriler = data;
+    if (!Array.isArray(data)) {
+      setDebug('Veri hatalı');
+      return;
+    }
 
-      const records = tumVeriler;
-      dashboardRender(records);
+    tumVeriler = data;
+    dashboardRender(tumVeriler);
 
-      setDebug('Dashboard yüklendi. Kayıt sayısı: ' + data.length);
+    setDebug('Yüklendi: ' + data.length);
 
-    })
-    .withFailureHandler(function(err) {
-      console.log("HATA:", err);
-      setDebug('Hata: ' + err);
-    })
-    .veriGetir();
+  } catch (err) {
+    console.error(err);
+    setDebug('Hata: ' + err.message);
+  }
 }
     function kaydiGuncelle(id) {
       const payload = {
