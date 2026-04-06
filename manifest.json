@@ -1,20 +1,23 @@
 {
   "name": "Numune Takip Sistemi",
   "short_name": "Numune",
-  "start_url": ".",
+  "id": "/numune-takip/",
+  "start_url": "/numune-takip/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0f766e",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "/numune-takip/icon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon.png",
+      "src": "/numune-takip/icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
