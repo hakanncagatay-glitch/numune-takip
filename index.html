@@ -1370,7 +1370,7 @@ function filtreliVeriler() {
       const grouped = buildAtelierData(records);
       const tbody = document.getElementById('atelierBody');
       tbody.innerHTML = '';
-
+grouped.sort((a,b)=>atelierPuanHesapla(b)-atelierPuanHesapla(a));
       grouped.forEach(g => {
         const toplamDegerlendirilen = g.kabul + g.red;
         const kabulOrani = toplamDegerlendirilen ? ((g.kabul / toplamDegerlendirilen) * 100) : 0;
