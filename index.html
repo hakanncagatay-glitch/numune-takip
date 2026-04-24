@@ -1527,17 +1527,75 @@ onclick="event.preventDefault();event.stopPropagation();kaydiSil('${r.id}')">
       const red = records.filter(x => x.durum === 'Red').length;
       const beklemede = records.filter(x => x.durum === 'Beklemede').length;
 
-      chartDurum = new Chart(elDurum, {
-        type: 'pie',
-        data: {
-          labels: ['Kabul', 'Red', 'Beklemede'],
-          datasets: [{
-            data: [kabul, red, beklemede],
-            backgroundColor: ['#16a34a', '#dc2626', '#f59e0b']
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
+chartDurum = new Chart(elDurum, {
+  type: 'pie',
+
+  data: {
+    labels: ['Kabul', 'Red', 'Beklemede'],
+    datasets: [{
+      data: [kabul, red, beklemede],
+      backgroundColor: ['#16a34a', '#dc2626', '#f59e0b'],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    plugins: {
+      legend: {
+        position: 'top'
+      },
+
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+
+            const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+            const val = ctx.raw;
+            const yuzde = ((val / total) * 100).toFixed(1);
+
+            return ctx.label + ': ' + val + ' adet (%' + yuzde + ')';
+          }
+        }
+      }
+    }
+  },
+
+  plugins: [{
+    id: 'yuzdeYaz',
+
+    afterDraw(chart) {
+
+      const {ctx} = chart;
+      const dataset = chart.data.datasets[0];
+      const meta = chart.getDatasetMeta(0);
+
+      const total = dataset.data.reduce((a,b)=>a+b,0);
+
+      meta.data.forEach((arc, i) => {
+
+        const val = dataset.data[i];
+        if(val === 0) return;
+
+        const yuzde = ((val / total) * 100).toFixed(0) + '%';
+
+        const pos = arc.tooltipPosition();
+
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 18px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(yuzde, pos.x, pos.y);
+        ctx.restore();
+
       });
+    }
+  }]
+});
 
       const urunMap = {};
       records.forEach(r => {
