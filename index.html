@@ -860,6 +860,12 @@ const API_POST = "https://script.google.com/macros/s/AKfycbw38jNafwLpsw72uAav9t7
 
 document.getElementById('sampleForm').addEventListener('submit', async function(e) {
   e.preventDefault();
+  e.stopPropagation();
+
+  if (!document.getElementById('pageForm').classList.contains('active')) {
+    return false;
+  }
+  e.preventDefault();
 
   const saveBtn = document.getElementById('saveBtn');
   saveBtn.disabled = true;
