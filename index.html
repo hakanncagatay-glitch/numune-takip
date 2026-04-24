@@ -1376,10 +1376,9 @@ function renderAtelierTable(records) {
 
   grouped
     .sort((a,b) => atelierPuanHesapla(b) - atelierPuanHesapla(a))
-    .forEach(g => {
+    .forEach((g,index) => {
 
       const toplam = g.kabul + g.red + g.beklemede;
-
       const puan = atelierPuanHesapla(g);
 
       const ortSaat = g.sureAdet
@@ -1394,10 +1393,39 @@ function renderAtelierTable(records) {
         ? ((g.red / toplam) * 100).toFixed(1) + '%'
         : '0%';
 
+      let sira = index + 1;
+      let madalya = sira;
+
+      if (sira === 1) madalya = '🥇';
+      if (sira === 2) madalya = '🥈';
+      if (sira === 3) madalya = '🥉';
+
+      let renk = '#64748b';
+
+      if (puan >= 85) renk = '#16a34a';
+      else if (puan >= 70) renk = '#2563eb';
+      else if (puan >= 55) renk = '#f59e0b';
+      else renk = '#dc2626';
+
       tbody.innerHTML += `
         <tr>
-          <td>${g.atelye}</td>
-          <td style="font-weight:800;color:#2563eb">${puan}</td>
+          <td style="font-weight:800">${madalya} ${g.atelye}</td>
+
+          <td>
+            <span style="
+              background:${renk};
+              color:#fff;
+              padding:6px 12px;
+              border-radius:999px;
+              font-weight:800;
+              display:inline-block;
+              min-width:55px;
+              text-align:center;
+            ">
+              ${puan}
+            </span>
+          </td>
+
           <td>${ortSaat}</td>
           <td>${g.kabul}</td>
           <td>${g.red}</td>
