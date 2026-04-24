@@ -1,6 +1,7 @@
 {
   "name": "Numune Takip Sistemi",
   "short_name": "Numune",
+  "id": "/numune-takip/",
   "start_url": "/numune-takip/",
   "scope": "/numune-takip/",
   "display": "standalone",
@@ -16,7 +17,7 @@
       "src": "/numune-takip/icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }
