@@ -370,6 +370,162 @@
     display: none;
   }
 }
+    /* =========================
+   PREMIUM MOBILE FINAL
+========================= */
+@media (max-width:768px){
+
+  body{
+    font-size:18px;
+    overflow-x:hidden;
+  }
+
+  .container{
+    padding:12px;
+  }
+
+  /* ÜST BUTONLAR */
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:999;
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    background:#eef2f7;
+    padding:10px;
+    margin-bottom:12px;
+    border-radius:0 0 16px 16px;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+  }
+
+  .tab-btn{
+    width:100%;
+    min-height:58px;
+    font-size:17px !important;
+    font-weight:700;
+    border-radius:14px;
+  }
+
+  /* BAŞLIKLAR */
+  h1{
+    font-size:32px;
+    line-height:1.15;
+  }
+
+  h2{
+    font-size:25px;
+  }
+
+  h3{
+    font-size:21px;
+  }
+
+  p,label{
+    font-size:17px;
+  }
+
+  /* FORM */
+  .grid,
+  .filters,
+  .charts,
+  .stats{
+    grid-template-columns:1fr !important;
+  }
+
+  input,
+  select,
+  textarea{
+    font-size:18px !important;
+    min-height:56px;
+    padding:14px;
+    border-radius:14px;
+  }
+
+  textarea{
+    min-height:120px;
+  }
+
+  .radio-group,
+  .check-group{
+    padding:14px;
+    gap:14px;
+    min-height:auto;
+  }
+
+  .radio-group label,
+  .check-group label{
+    font-size:16px;
+  }
+
+  /* ANA BUTONLAR */
+  button,
+  .quick-btn,
+  .mini-btn{
+    min-height:56px;
+    font-size:17px !important;
+    border-radius:14px;
+    font-weight:700;
+  }
+
+  .actions,
+  .filter-actions,
+  .mobile-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  /* KARTLAR */
+  .card,
+  .chart-card,
+  .stat,
+  .mobile-card{
+    border-radius:18px;
+    padding:16px;
+  }
+
+  .stat-title{
+    font-size:16px;
+  }
+
+  .stat-value{
+    font-size:34px;
+    margin-top:8px;
+  }
+
+  /* GRAFİK */
+  .chart-wrap{
+    height:280px !important;
+  }
+
+  /* TABLO KAPAT */
+  table{
+    display:none !important;
+  }
+
+  #mobileList{
+    display:block !important;
+  }
+
+  .mobile-card .title{
+    font-size:20px;
+    margin-bottom:8px;
+  }
+
+  .mobile-card .row{
+    font-size:16px;
+    margin-bottom:6px;
+  }
+
+  /* MODAL */
+  #editModal > div{
+    width:94% !important;
+    margin:25px auto !important;
+    border-radius:18px;
+  }
+
+}
   </style>
 </head>
 <body>
