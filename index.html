@@ -1177,8 +1177,11 @@ Sil
       renderStats(records);
       renderAtelierTable(records);
       renderCharts(records);
-      renderKayitListesi(records);
-      renderMobileList(records);
+if (window.innerWidth < 768) {
+  renderMobileList(records);
+} else {
+  renderKayitListesi(records);
+}
     }
 
    
