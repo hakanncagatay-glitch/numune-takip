@@ -780,49 +780,88 @@ tr:hover td{
       </div>
     </section>
 
-    <section id="pageDashboard" class="page">
+   <!-- KPI BLOĞUNUN TAMAMINI BUNUNLA DEĞİŞTİR -->
+
+<section id="pageDashboard" class="page">
+
 <div class="stats">
 
-<div class="stat stat-blue">
-<div class="stat-icon">📋</div>
+<div class="stat blue">
+<div class="badge blue-badge">▣</div>
 <div class="stat-title">TOPLAM PPS</div>
-<div class="stat-value blue">2</div>
+<div class="stat-value blue-text" id="toplamKayit">0</div>
 <div class="stat-sub">Sistemdeki toplam numune</div>
 </div>
 
-<div class="stat">
-  <div class="stat-badge success">✓</div>
-  <div class="stat-title">Kabul PPS</div>
-  <div class="stat-value" id="kabulSayisi">0</div>
+<div class="stat green">
+<div class="badge green-badge">✓</div>
+<div class="stat-title">KABUL PPS</div>
+<div class="stat-value green-text" id="kabulSayisi">0</div>
+<div class="stat-sub">Kabul edilen numune</div>
 </div>
 
-<div class="stat">
-  <div class="stat-badge danger">✕</div>
-  <div class="stat-title">Red PPS</div>
-  <div class="stat-value" id="redSayisi">0</div>
+<div class="stat red">
+<div class="badge red-badge">✕</div>
+<div class="stat-title">RED PPS</div>
+<div class="stat-value red-text" id="redSayisi">0</div>
+<div class="stat-sub">Red edilen numune</div>
 </div>
 
-<div class="stat">
-  <div class="stat-badge wait">◷</div>
-  <div class="stat-title">Beklemede PPS</div>
-  <div class="stat-value" id="beklemedeSayisi">0</div>
+<div class="stat orange">
+<div class="badge orange-badge">◷</div>
+<div class="stat-title">BEKLEMEDE PPS</div>
+<div class="stat-value orange-text" id="beklemedeSayisi">0</div>
+<div class="stat-sub">Bekleyen numuneler</div>
 </div>
 
-<div class="stat">
-  <div class="stat-badge primary">⏱</div>
-  <div class="stat-title">Ort. Dikim Süresi (saat)</div>
-  <div class="stat-value" id="ortalamaDikimSuresi">0,00</div>
+<div class="stat purple">
+<div class="badge purple-badge">⏱</div>
+<div class="stat-title">ORT. DİKİM SÜRESİ (SAAT)</div>
+<div class="stat-value purple-text" id="ortalamaDikimSuresi">0,00</div>
+<div class="stat-sub">Ortalama üretim süresi</div>
 </div>
 
 </div>
 
-      <div class="stats">
-        <div class="stat"><div class="stat-title">Toplam Ciro (TL)</div><div class="stat-value" id="toplamCiro">0</div></div>
-        <div class="stat"><div class="stat-title">Toplam Model Sayısı</div><div class="stat-value" id="toplamModelSayisi">0</div></div>
-        <div class="stat"><div class="stat-title">Ort. PPS Dönüş Süresi (gün)</div><div class="stat-value" id="ortalamaDonusSuresi">0,00</div></div>
-        <div class="stat"><div class="stat-title">Başlangıç Tarihi</div><div class="stat-value" id="baslangicLabel">TÜMÜ</div></div>
-        <div class="stat"><div class="stat-title">Bitiş Tarihi</div><div class="stat-value" id="bitisLabel">TÜMÜ</div></div>
-      </div>
+
+<div class="stats">
+
+<div class="stat cyan">
+<div class="badge cyan-badge">₺</div>
+<div class="stat-title">TOPLAM CİRO (TL)</div>
+<div class="stat-value cyan-text" id="toplamCiro">0</div>
+<div class="stat-sub">Toplam üretim cirosu</div>
+</div>
+
+<div class="stat blue">
+<div class="badge blue-badge">⌂</div>
+<div class="stat-title">TOPLAM MODEL SAYISI</div>
+<div class="stat-value blue-text" id="toplamModelSayisi">0</div>
+<div class="stat-sub">Toplam model adedi</div>
+</div>
+
+<div class="stat purple">
+<div class="badge purple-badge">↺</div>
+<div class="stat-title">ORT. PPS DÖNÜŞ (GÜN)</div>
+<div class="stat-value purple-text" id="ortalamaDonusSuresi">0,00</div>
+<div class="stat-sub">Dönüş süresi ortalama</div>
+</div>
+
+<div class="stat gold">
+<div class="badge gold-badge">◫</div>
+<div class="stat-title">BAŞLANGIÇ TARİHİ</div>
+<div class="stat-value" id="baslangicLabel">TÜMÜ</div>
+<div class="stat-sub">Filtre başlangıcı</div>
+</div>
+
+<div class="stat blue">
+<div class="badge blue-badge">◫</div>
+<div class="stat-title">BİTİŞ TARİHİ</div>
+<div class="stat-value" id="bitisLabel">TÜMÜ</div>
+<div class="stat-sub">Filtre bitişi</div>
+</div>
+
+</div>
 
       <div class="card">
         <h2>Tarih Aralığı</h2>
