@@ -1242,6 +1242,7 @@ async function dashboardYukle() {
   const result = await res.json();
 
   if (result.ok) {
+     cacheTime = 0;
     dashboardYukle();
   } else {
     alert(result.message);
@@ -1408,6 +1409,7 @@ async function kaydiKaydet() {
   const result = await res.json();
 
   if (result.ok) {
+    cacheTime = 0;
     modalKapat();
     dashboardYukle();
   } else {
