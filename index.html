@@ -1295,11 +1295,11 @@ async function kaydiSil(id) {
     function renderPagination(total) {
   const totalPages = Math.ceil(total / pageSize);
 
-  document.getElementById('pagination').innerHTML = `
-    <button onclick="prevPage()">◀</button>
-    Sayfa ${currentPage} / ${totalPages}
-    <button onclick="nextPage(${totalPages})">▶</button>
-  `;
+ document.getElementById('pagination').innerHTML = `
+<button type="button" onclick="prevPage()">◀</button>
+Sayfa ${currentPage} / ${totalPages}
+<button type="button" onclick="nextPage(${totalPages})">▶</button>
+`;
 }
 
 function prevPage() {
