@@ -1186,28 +1186,33 @@ const API_URL = "https://script.google.com/macros/s/AKfycbw38jNafwLpsw72uAav9t79
 
 async function dashboardYukle() {
 
-  setDebug('Dashboard verileri yükleniyor...');
+  const now = Date.now();
+
+  if (tumVeriler.length > 0 && (now - cacheTime < CACHE_MS)) {
+    dashboardRender(tumVeriler);
+    setDebug("Cache kullanıldı");
+    return;
+  }
+
+  setDebug("Veri yükleniyor...");
 
   try {
-
     const res = await fetch(API_URL);
     const data = await res.json();
 
-    console.log("DATA GELDİ:", data);
-
     if (!Array.isArray(data)) {
-      setDebug('Veri hatalı');
+      setDebug("Veri hatalı");
       return;
     }
 
     tumVeriler = data;
+    cacheTime = Date.now();
+
     dashboardRender(tumVeriler);
+    setDebug("Sunucudan yüklendi");
 
-    setDebug('Yüklendi: ' + data.length);
-
-  } catch (err) {
-    console.error(err);
-    setDebug('Hata: ' + err.message);
+  } catch(err) {
+    setDebug("Hata: " + err.message);
   }
 }
    async function kaydiGuncelle(id) {
