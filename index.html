@@ -1036,8 +1036,14 @@ function filtreliVeriler() {
       <td>${r.redSebebi || ''}</td>
       <td>${r.aciklama || ''}</td>
      <td>
-<button type="button" onclick="editAc('${r.id}')">Düzenle</button>
-<button type="button" onclick="kaydiSil('${r.id}')">Sil</button>
+<button type="button"
+onclick="event.preventDefault();event.stopPropagation();editAc('${r.id}')">
+Düzenle
+</button>
+<button type="button"
+onclick="event.preventDefault();event.stopPropagation();kaydiSil('${r.id}')">
+Sil
+</button>
 </td>
     `;
 
@@ -1411,8 +1417,14 @@ function renderMobileList(records) {
       <div class="row"><b>Red:</b> ${r.redSebebi || '-'}</div>
 
       <div class="mobile-actions">
-<button type="button" onclick="editAc('${r.id}')">Düzenle</button>
-<button type="button" onclick="kaydiSil('${r.id}')">Sil</button>
+<button type="button"
+onclick="event.preventDefault();event.stopPropagation();editAc('${r.id}')">
+Düzenle
+</button>
+<button type="button"
+onclick="event.preventDefault();event.stopPropagation();kaydiSil('${r.id}')">
+Sil
+</button>
       </div>
     `;
 
