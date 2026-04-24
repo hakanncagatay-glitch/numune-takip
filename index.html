@@ -1764,46 +1764,79 @@ function buildAtelierData(records) {
 
   return Object.values(map);
 }
-    function atelierPuanHesapla(g) {
+    /* ==================================================
+   SADECE atelierPuanHesapla(g) FONKSİYONUNU DEĞİŞTİR
+   Eskisini sil, bunu koy
+================================================== */
+
+function atelierPuanHesapla(g) {
 
   const toplam = g.kabul + g.red + g.beklemede;
 
   if (toplam === 0) return 0;
 
-  // Kabul oranı
-  let kabulOrani = g.kabul / toplam;
-  let puan1 = kabulOrani * 40;
+  /* ---------------------------------
+     1) PERFORMANS PUANI (100 baz)
+  ----------------------------------*/
 
-  // Red cezası
-  let redOrani = g.red / toplam;
-  let puan2 = 20 - (redOrani * 20);
-  if (puan2 < 0) puan2 = 0;
+  // Kabul oranı (50 puan)
+  const kabulOrani = g.kabul / toplam;
+  let puanKabul = kabulOrani * 50;
 
-  // Hız puanı
+  // Red cezası (20 puanlık etki)
+  const redOrani = g.red / toplam;
+  let puanRed = 20 - (redOrani * 20);
+  if (puanRed < 0) puanRed = 0;
+
+  // Bekleme cezası (10 puan)
+  const beklemeOrani = g.beklemede / toplam;
+  let puanBekleme = 10 - (beklemeOrani * 10);
+  if (puanBekleme < 0) puanBekleme = 0;
+
+  // Hız puanı (20 puan)
   let ortSaat = g.sureAdet
     ? (g.sureToplam / g.sureAdet) / 60
     : 99;
 
-  let puan3 = 20;
+  let puanHiz = 20;
 
-  if (ortSaat > 5) puan3 = 18;
-  if (ortSaat > 7) puan3 = 14;
-  if (ortSaat > 9) puan3 = 10;
-  if (ortSaat > 12) puan3 = 5;
+  if (ortSaat > 5) puanHiz = 18;
+  if (ortSaat > 8) puanHiz = 14;
+  if (ortSaat > 12) puanHiz = 10;
+  if (ortSaat > 24) puanHiz = 5;
 
-  // Bekleme cezası
-  let puan4 = 10 - g.beklemede;
-  if (puan4 < 0) puan4 = 0;
+  // Model bonus (10 puan max)
+  let puanModel = Math.min(g.modeller.size, 10);
 
-  // Model bonus
-  let puan5 = Math.min(g.modeller.size, 10);
+  let performans =
+    puanKabul +
+    puanRed +
+    puanBekleme +
+    puanHiz +
+    puanModel;
 
-  let toplamPuan =
-    puan1 + puan2 + puan3 + puan4 + puan5;
+  /* ---------------------------------
+     2) GÜVEN KATSAYISI
+  ----------------------------------*/
 
-  return Math.round(toplamPuan);
+  let katsayi = 1;
+
+  if (toplam === 1) katsayi = 0.75;
+  else if (toplam === 2) katsayi = 0.82;
+  else if (toplam === 3) katsayi = 0.88;
+  else if (toplam === 4) katsayi = 0.92;
+  else if (toplam === 5) katsayi = 0.95;
+  else if (toplam < 10) katsayi = 0.98;
+  else katsayi = 1;
+
+  /* ---------------------------------
+     3) FİNAL PUAN
+  ----------------------------------*/
+
+  const finalPuan = performans * katsayi;
+
+  return Math.round(finalPuan);
 }
-
 let aktifID = null;
 function editAc(id) {
   const kayit = tumVeriler.find(x => x.id == id);
