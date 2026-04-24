@@ -1746,7 +1746,6 @@ function buildAtelierData(records) {
 
   return Object.values(map);
 }
-let aktifID = null;
     function atelierPuanHesapla(g) {
 
   const toplam = g.kabul + g.red + g.beklemede;
@@ -1787,6 +1786,7 @@ let aktifID = null;
   return Math.round(toplamPuan);
 }
 
+let aktifID = null;
 function editAc(id) {
   const kayit = tumVeriler.find(x => x.id == id);
   if (!kayit) return;
