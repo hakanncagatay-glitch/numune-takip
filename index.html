@@ -1373,14 +1373,17 @@ function filtreliVeriler() {
       <td>${r.durum || ''}</td>
       <td>${r.redSebebi || ''}</td>
       <td>${r.aciklama || ''}</td>
-     <td>
+<td>
 <button type="button"
+class="action-btn edit-btn"
 onclick="event.preventDefault();event.stopPropagation();editAc('${r.id}')">
-Düzenle
+✏ Düzenle
 </button>
+
 <button type="button"
+class="action-btn delete-btn"
 onclick="event.preventDefault();event.stopPropagation();kaydiSil('${r.id}')">
-Sil
+🗑 Sil
 </button>
 </td>
     `;
