@@ -1376,10 +1376,11 @@ grouped.sort((a,b)=>atelierPuanHesapla(b)-atelierPuanHesapla(a));
         const kabulOrani = toplamDegerlendirilen ? ((g.kabul / toplamDegerlendirilen) * 100) : 0;
         const redOrani = toplamDegerlendirilen ? ((g.red / toplamDegerlendirilen) * 100) : 0;
         const ortSureDakika = g.sureAdet ? (g.sureToplam / g.sureAdet) : 0;
-
+const puan = atelierPuanHesapla(g);
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${g.atelye}</td>
+<td>${puan}</td>
           <td>${saatTextFromDakika(ortSureDakika)}</td>
           <td>${g.kabul}</td>
           <td>${g.red}</td>
