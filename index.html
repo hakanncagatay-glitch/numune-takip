@@ -897,12 +897,14 @@ document.getElementById('sampleForm').addEventListener('submit', async function(
 
     const result = await res.json();
 
-    if (result.ok) {
-      document.getElementById('sampleForm').reset();
-      document.getElementById('varyantTipi').value = 'Standart';
-      setStatus('Kayıt başarılı', true);
-      dashboardYukle();
-    } else {
+if (result.ok) {
+  document.getElementById('sampleForm').reset();
+  document.getElementById('varyantTipi').value = 'Standart';
+  setStatus('Kayıt başarılı', true);
+
+  cacheTime = 0;
+  dashboardYukle();
+} else {
       setStatus(result.message, false);
     }
 
@@ -1176,7 +1178,9 @@ Sil
       if (!Array.isArray(records)) records = [];
       renderStats(records);
       renderAtelierTable(records);
-      renderCharts(records);
+    if(records.length > 0){
+ renderCharts(records);
+}
 if (window.innerWidth < 768) {
   renderMobileList(records);
 } else {
