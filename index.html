@@ -808,7 +808,8 @@ const pageSize = 20;
     let chartSure = null;
     let chartRedSebep = null;
     let tumVeriler = [];
-
+let cacheTime = 0;
+const CACHE_MS = 30000;
     function sayfaAc(target) {
       const formAktif = target === 'form';
       document.getElementById('pageForm').classList.toggle('active', formAktif);
