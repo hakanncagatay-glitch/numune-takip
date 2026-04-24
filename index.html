@@ -1367,33 +1367,47 @@ function filtreliVeriler() {
       document.getElementById('bitisLabel').textContent = document.getElementById('filterBitis').value || 'TÜMÜ';
     }
 
-    function renderAtelierTable(records) {
-      const grouped = buildAtelierData(records);
-      const tbody = document.getElementById('atelierBody');
-      tbody.innerHTML = '';
-grouped.sort((a,b)=>atelierPuanHesapla(b)-atelierPuanHesapla(a));
-      grouped.forEach(g => {
-        const toplamDegerlendirilen = g.kabul + g.red;
-        const kabulOrani = toplamDegerlendirilen ? ((g.kabul / toplamDegerlendirilen) * 100) : 0;
-        const redOrani = toplamDegerlendirilen ? ((g.red / toplamDegerlendirilen) * 100) : 0;
-        const ortSureDakika = g.sureAdet ? (g.sureToplam / g.sureAdet) : 0;
-const puan = atelierPuanHesapla(g);
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${g.atelye}</td>
-<td>${puan}</td>
-          <td>${saatTextFromDakika(ortSureDakika)}</td>
-          <td>${g.kabul}</td>
-          <td>${g.red}</td>
-          <td>${g.beklemede}</td>
-          <td>${sayiFormat(kabulOrani, 1)}%</td>
-          <td>${sayiFormat(redOrani, 1)}%</td>
-          <td>${g.modeller.size}</td>
-          <td>${Math.round(g.ciro).toLocaleString('tr-TR')}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+function renderAtelierTable(records) {
+
+  const grouped = buildAtelierData(records);
+  const tbody = document.getElementById('atelierBody');
+
+  tbody.innerHTML = '';
+
+  grouped
+    .sort((a,b) => atelierPuanHesapla(b) - atelierPuanHesapla(a))
+    .forEach(g => {
+
+      const toplam = g.kabul + g.red + g.beklemede;
+
+      const kabulOrani = toplam ? (g.kabul / toplam) * 100 : 0;
+      const redOrani   = toplam ? (g.red / toplam) * 100 : 0;
+
+      const ortSaat =
+        g.sureAdet
+        ? ((g.sureToplam / g.sureAdet) / 60).toFixed(2)
+        : "0.00";
+
+      const puan = atelierPuanHesapla(g);
+
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td>${g.atelye}</td>
+        <td><b>${puan}</b></td>
+        <td>${ortSaat}</td>
+        <td>${g.kabul}</td>
+        <td>${g.red}</td>
+        <td>${g.beklemede}</td>
+        <td>${kabulOrani.toFixed(1)}%</td>
+        <td>${redOrani.toFixed(1)}%</td>
+        <td>${g.modeller.size}</td>
+        <td>${Math.round(g.ciro).toLocaleString('tr-TR')}</td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+}
 
  function renderKayitListesi(records) {
   const tbody = document.getElementById('kayitBody');
