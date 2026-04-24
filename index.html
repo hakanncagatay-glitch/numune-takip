@@ -1747,6 +1747,45 @@ function buildAtelierData(records) {
   return Object.values(map);
 }
 let aktifID = null;
+    function atelierPuanHesapla(g) {
+
+  const toplam = g.kabul + g.red + g.beklemede;
+
+  if (toplam === 0) return 0;
+
+  // Kabul oranı
+  let kabulOrani = g.kabul / toplam;
+  let puan1 = kabulOrani * 40;
+
+  // Red cezası
+  let redOrani = g.red / toplam;
+  let puan2 = 20 - (redOrani * 20);
+  if (puan2 < 0) puan2 = 0;
+
+  // Hız puanı
+  let ortSaat = g.sureAdet
+    ? (g.sureToplam / g.sureAdet) / 60
+    : 99;
+
+  let puan3 = 20;
+
+  if (ortSaat > 5) puan3 = 18;
+  if (ortSaat > 7) puan3 = 14;
+  if (ortSaat > 9) puan3 = 10;
+  if (ortSaat > 12) puan3 = 5;
+
+  // Bekleme cezası
+  let puan4 = 10 - g.beklemede;
+  if (puan4 < 0) puan4 = 0;
+
+  // Model bonus
+  let puan5 = Math.min(g.modeller.size, 10);
+
+  let toplamPuan =
+    puan1 + puan2 + puan3 + puan4 + puan5;
+
+  return Math.round(toplamPuan);
+}
 
 function editAc(id) {
   const kayit = tumVeriler.find(x => x.id == id);
