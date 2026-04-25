@@ -2007,6 +2007,15 @@ Sil
     container.appendChild(div);
   });
 }
+    document.getElementById('filterOrder').addEventListener('input', function () {
+  currentPage = 1;
+  dashboardRender(filtreliVeriler());
+});
+
+document.getElementById('filterDurum').addEventListener('change', function () {
+  currentPage = 1;
+  dashboardRender(filtreliVeriler());
+});
   </script>
 
   <script>
