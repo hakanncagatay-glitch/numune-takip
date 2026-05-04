@@ -1242,6 +1242,43 @@ const CACHE_MS = 30000;
 const API_POST = "https://script.google.com/macros/s/AKfycbw38jNafwLpsw72uAav9t79txtkSCgDPYZfOP6S1ld6Zjho1LBhK5E5VTHNDrRueW_M/exec";
 
 document.getElementById('sampleForm').addEventListener('submit', async function(e) {
+  // 🔥 AKILLI VALIDATION
+
+const model = document.getElementById('orderNo').value.trim();
+const urun = document.getElementById('urunGrubu').value;
+const kesim = document.getElementById('kesimTarihSaat').value;
+
+const dikimYeri = document.getElementById('dikimYeri').value;
+const baslama = document.getElementById('dikimBaslama').value;
+const bitis = document.getElementById('dikimBitis').value;
+const numune = document.getElementById('numuneSayisi').value;
+const dikimSayisi = document.getElementById('dikimSayisi').value;
+
+// 1️⃣ İlk kayıt kontrolü
+if (!model || !urun || !kesim) {
+  alert("Model, Ürün Grubu ve Kesim Tarihi zorunlu");
+  return;
+}
+
+// 2️⃣ Dikim başladıysa
+if (baslama && !dikimYeri) {
+  alert("Dikim başlama girildi, atölye seçmelisin");
+  return;
+}
+
+// 3️⃣ Dikim bitmişse
+if (bitis) {
+
+  if (!baslama) {
+    alert("Bitiş girildi ama başlangıç yok");
+    return;
+  }
+
+  if (!numune || !dikimSayisi) {
+    alert("Dikim bitince numune ve dikim sayısı zorunlu");
+    return;
+  }
+}
   e.preventDefault();
   e.stopPropagation();
 
