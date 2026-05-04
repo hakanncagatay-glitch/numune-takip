@@ -2026,6 +2026,63 @@ document.getElementById('filterDurum').addEventListener('change', function () {
   currentPage = 1;
   dashboardRender(filtreliVeriler());
 });
+    async function kayitGetir() {
+
+  const model = document.getElementById('orderNo').value.trim();
+
+  if (!model) {
+    alert("Model kodu gir");
+    return;
+  }
+
+  try {
+
+    const res = await fetch(API_POST, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "findModel",
+        search: model
+      })
+    });
+
+    const result = await res.json();
+
+    if (!result.ok || !result.data) {
+      alert("Kayıt bulunamadı");
+      return;
+    }
+
+    const d = result.data;
+
+    // FORM DOLDUR
+    document.getElementById('urunGrubu').value = d.urunGrubu || '';
+    document.getElementById('kesimTarihSaat').value = d.kesimTarihSaat || '';
+    document.getElementById('dikimYeri').value = d.dikimYeri || '';
+    document.getElementById('dikimBaslama').value = d.dikimBaslama || '';
+    document.getElementById('dikimBitis').value = d.dikimBitis || '';
+    document.getElementById('numuneSayisi').value = d.numuneSayisi || '';
+    document.getElementById('dikimSayisi').value = d.dikimSayisi || '';
+    document.getElementById('varyantTipi').value = d.varyantTipi || 'Takım';
+    document.getElementById('varyantDetayi').value = d.varyantDetayi || '';
+    document.getElementById('aciklama').value = d.aciklama || '';
+
+    // DURUM
+    if (d.durum) {
+      const radio = document.querySelector(`input[name="durum"][value="${d.durum}"]`);
+      if (radio) radio.checked = true;
+    }
+
+    // RED SEBEBİ
+    document.querySelectorAll('input[name="redSebebi"]').forEach(chk => {
+      chk.checked = d.redSebebi && d.redSebebi.includes(chk.value);
+    });
+
+    alert("Kayıt bulundu - güncelleme modundasın");
+
+  } catch (err) {
+    alert("Hata: " + err.message);
+  }
+}
   </script>
 
   <script>
