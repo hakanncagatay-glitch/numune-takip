@@ -831,10 +831,19 @@ transform:translateY(-1px);
         <p>Operatör giriş ekranı</p>
 
        <form id="sampleForm" class="grid" autocomplete="off">
-          <div>
-            <label>Model Kodu</label>
-            <input type="text" id="orderNo" required />
-          </div>
+<div>
+  <label>Model Kodu</label>
+
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="orderNo" required style="flex:1;" />
+
+    <button type="button"
+      class="quick-btn"
+      onclick="kayitGetir()">
+      🔍 Güncelleme
+    </button>
+  </div>
+</div>
 
           <div>
             <label>Ürün Grubu</label>
