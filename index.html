@@ -830,7 +830,7 @@ transform:translateY(-1px);
         <h1>Numune Takip Formu</h1>
         <p>Operatör giriş ekranı</p>
 
-       <form id="sampleForm" class="grid" autocomplete="off">
+       <form id="sampleForm" class="grid" autocomplete="off" novalidate>
 <div>
   <label>Model Kodu</label>
 
@@ -864,27 +864,27 @@ transform:translateY(-1px);
 
           <div>
             <label>Dikim Yeri / Atölye</label>
-            <input type="text" id="dikimYeri" required />
+            <input type="text" id="dikimYeri" >
           </div>
 
           <div>
             <label>Dikim Başlama Tarih / Saat</label>
-            <input type="datetime-local" id="dikimBaslama" required />
+            <input type="datetime-local" id="dikimBaslama" >
           </div>
 
           <div>
             <label>Dikim Bitiş Tarih / Saat</label>
-            <input type="datetime-local" id="dikimBitis" required />
+            <input type="datetime-local" id="dikimBitis" >
           </div>
 
           <div>
             <label>Dikilen Numune Sayısı</label>
-            <input type="number" id="numuneSayisi" min="1" required />
+            <input type="number" id="numuneSayisi" min="1" >
           </div>
 
           <div>
             <label>Dikim Sayısı</label>
-            <select id="dikimSayisi" required>
+            <select id="dikimSayisi" >
               <option value="">Seçiniz</option>
               <option value="İlk Dikim">İlk Dikim</option>
               <option value="Tekrar Dikim">Tekrar Dikim</option>
@@ -912,9 +912,9 @@ transform:translateY(-1px);
           <div>
             <label>Durum</label>
             <div class="radio-group">
-              <label><input type="radio" name="durum" value="Kabul" required /> Kabul</label>
-              <label><input type="radio" name="durum" value="Red" required /> Red</label>
-              <label><input type="radio" name="durum" value="Beklemede" required /> Beklemede</label>
+              <label><input type="radio" name="durum" value="Kabul" > Kabul</label>
+              <label><input type="radio" name="durum" value="Red" > Red</label>
+              <label><input type="radio" name="durum" value="Beklemede" > Beklemede</label>
             </div>
           </div>
 
