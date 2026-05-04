@@ -831,6 +831,7 @@ transform:translateY(-1px);
         <p>Operatör giriş ekranı</p>
 
        <form id="sampleForm" class="grid" autocomplete="off" novalidate>
+         <input type="hidden" id="recordId">
 <div>
   <label>Model Kodu</label>
 
@@ -1290,22 +1291,25 @@ if (bitis) {
   const saveBtn = document.getElementById('saveBtn');
   saveBtn.disabled = true;
   setStatus('Kaydediliyor...', true);
+const recordId = document.getElementById('recordId').value;
+const payload = {
+  action: recordId ? "update" : "insert",
+  id: recordId,
 
-  const payload = {
-    orderNo: document.getElementById('orderNo').value.trim(),
-    urunGrubu: document.getElementById('urunGrubu').value,
-    kesimTarihSaat: document.getElementById('kesimTarihSaat').value,
-    dikimYeri: document.getElementById('dikimYeri').value.trim(),
-    dikimBaslama: document.getElementById('dikimBaslama').value,
-    dikimBitis: document.getElementById('dikimBitis').value,
-    numuneSayisi: Number(document.getElementById('numuneSayisi').value || 0),
-    dikimSayisi: document.getElementById('dikimSayisi').value,
-    varyantTipi: document.getElementById('varyantTipi').value,
-    varyantDetayi: document.getElementById('varyantDetayi').value.trim(),
-    durum: getDurum(),
-    redSebebi: getRedSebebi(),
-    aciklama: document.getElementById('aciklama').value.trim()
-  };
+  orderNo: document.getElementById('orderNo').value.trim(),
+  urunGrubu: document.getElementById('urunGrubu').value,
+  kesimTarihSaat: document.getElementById('kesimTarihSaat').value,
+  dikimYeri: document.getElementById('dikimYeri').value.trim(),
+  dikimBaslama: document.getElementById('dikimBaslama').value,
+  dikimBitis: document.getElementById('dikimBitis').value,
+  numuneSayisi: Number(document.getElementById('numuneSayisi').value || 0),
+  dikimSayisi: document.getElementById('dikimSayisi').value,
+  varyantTipi: document.getElementById('varyantTipi').value,
+  varyantDetayi: document.getElementById('varyantDetayi').value.trim(),
+  durum: getDurum(),
+  redSebebi: getRedSebebi(),
+  aciklama: document.getElementById('aciklama').value.trim()
+};
 
   try {
 
@@ -1318,6 +1322,7 @@ if (bitis) {
 
 if (result.ok) {
   document.getElementById('sampleForm').reset();
+  document.getElementById('recordId').value = '';
   document.getElementById('varyantTipi').value = 'Takım';
   setStatus('Kayıt başarılı', true);
 
@@ -2090,7 +2095,7 @@ document.getElementById('filterDurum').addEventListener('change', function () {
     }
 
     const d = result.data;
-
+document.getElementById('recordId').value = d.id || '';
     // FORM DOLDUR
     document.getElementById('urunGrubu').value = d.urunGrubu || '';
     document.getElementById('kesimTarihSaat').value = d.kesimTarihSaat || '';
