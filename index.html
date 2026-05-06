@@ -1781,6 +1781,13 @@ async function dashboardYukle() {
 
 async function kaydiSil(id) {
 
+  const sifre = prompt("Silme şifresini gir");
+
+  if (sifre !== "PPS2026") {
+    alert("Şifre yanlış");
+    return;
+  }
+
   if (!confirm("Silinsin mi?")) return;
 
   const payload = {
