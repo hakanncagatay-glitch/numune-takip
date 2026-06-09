@@ -1993,6 +1993,8 @@ function editAc(id) {
   document.getElementById('editDurum').value = kayit.durum;
   document.getElementById('editRed').value = kayit.redSebebi;
   document.getElementById('editAciklama').value = kayit.aciklama;
+  document.getElementById('editCevapTarihi').value =
+    kayit.cevapTarihi || '';
 
   document.getElementById('editModal').style.display = 'block';
 }
