@@ -2005,13 +2005,14 @@ function modalKapat() {
 
 async function kaydiKaydet() {
 
-  const payload = {
-    action: "resultUpdate",
-    id: aktifID,
-    durum: document.getElementById('editDurum').value,
-    redSebebi: document.getElementById('editRed').value,
-    aciklama: document.getElementById('editAciklama').value
-  };
+const payload = {
+  action: "resultUpdate",
+  id: aktifID,
+  durum: document.getElementById('editDurum').value,
+  redSebebi: document.getElementById('editRed').value,
+  aciklama: document.getElementById('editAciklama').value,
+  cevapTarihi: document.getElementById('editCevapTarihi').value
+};
 
   const res = await fetch(API_POST, {
     method: "POST",
