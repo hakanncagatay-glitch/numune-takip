@@ -1405,8 +1405,8 @@ function filtreliVeriler() {
       const toplamModel = new Set(records.map(x => x.orderNo).filter(Boolean)).size;
       const sureler = records.map(x => Number(x.dikimSuresiDakika) || 0).filter(x => x > 0);
       const ortSureDakika = sureler.length ? (sureler.reduce((a, b) => a + b, 0) / sureler.length) : 0;
-      const donusSureleri = records
-.map(x => Number(x.toplamSureGun) || 0)
+     const donusSureleri = records
+.map(x => Number(x.donusSuresiGun) || 0)
 .filter(x => x > 0);
       const ortDonus = donusSureleri.length ? (donusSureleri.reduce((a, b) => a + b, 0) / donusSureleri.length) : 0;
 
